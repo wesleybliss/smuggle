@@ -1,7 +1,21 @@
-
+import osproc
 import jester, asyncdispatch, htmlgen
+import lib/update_repo
 
-from lib/update_repo import version
+# proc quoteShell(s: string): string
+# 
+
+try:
+  let (outp, errC) = execCmdEx("ls -al /tmp")
+  echo outp
+except:
+  echo "LS on /tmp failed"
+
+try:
+  updateRepo("foo", "bar")
+except:
+  echo "updateRepo failed"
+
 
 settings:
   staticDir = "/tmp"
