@@ -1,0 +1,13 @@
+{
+    "execMap": {
+        "$SHELL": "bin/smuggle"
+    },
+    "ignore": [
+        ".git",
+        "node_modules/**/node_modules"
+    ],
+    "watch": [
+        "./"
+    ],
+    "ext": "js json env"
+}

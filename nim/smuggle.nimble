@@ -5,7 +5,7 @@ author        = "Wesley Bliss"
 description   = "Testing"
 license       = "MIT"
 
-bin           = @["nimtest"]
+bin           = @["smuggle"]
 
 # Dependencies
 

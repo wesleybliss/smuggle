@@ -1,0 +1,31 @@
+{
+  "name": "smuggle",
+  "version": "1.0.0",
+  "description": "Webhook interceptor",
+  "main": "bin/smuggle",
+  "scripts": {
+    "start": "nodemon --config ./nodemon.json bin/smuggle",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "todo"
+  },
+  "keywords": [
+    "webhook",
+    "github",
+    "gitlab"
+  ],
+  "author": "Wesley Bliss <wesley.bliss@gmail.com> (https://wesleybliss.com)",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "chalk": "^2.3.0",
+    "commander": "^2.12.2",
+    "dotenv": "^4.0.0",
+    "require-all": "^2.2.0",
+    "restify": "^6.3.4",
+    "restify-cors-middleware": "^1.1.0",
+    "winston": "^2.4.0"
+  }
+}

@@ -1,0 +1,40 @@
+#!/bin/env node
+
+'use strict'
+// Bluebird tends to be a faster-than-native Promise implementation
+global.Promise = require('bluebird')
+
+const fs = require('fs')
+const path = require('path')
+const program = require('commander')
+const initConfig = require('../src/utils/init-config')
+
+process.title = 'smuggle'
+
+const args = process.argv.map(x => x)
+
+args.shift() // Node executable
+args.shift() // Sabu executable
+
+// console.log(args, process.argv)
+
+if (args.length === 1 && args[0] === 'init')
+    return initConfig()
+
+program
+    .version('1.0.0')
+    .usage('[options]')
+    .option('-c, --config <s>', 'JSON config file')
+
+program.parse(process.argv)
+
+if (!program.config)
+    program.config = path.join(process.cwd(), 'smuggle.json')
+
+if (!fs.existsSync(program.config))
+    throw new Error('Can\'t access repos JSON config at ' + program.config)
+
+console.info('Processing config file from', program.config)
+const config = JSON.parse(fs.readFileSync(program.config, 'utf8'))
+
+require('../src/index')(config)
