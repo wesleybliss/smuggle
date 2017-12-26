@@ -26,6 +26,7 @@
     "require-all": "^2.2.0",
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.1.0",
+    "shelljs": "^0.7.8",
     "winston": "^2.4.0"
   }
 }
