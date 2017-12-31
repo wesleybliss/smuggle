@@ -8,6 +8,12 @@
     "patch-release": "npm version patch && npm publish && git push --follow-tags",
     "test": "mocha"
   },
+  "files": [
+    "src"
+  ],
+  "bin": {
+    "smuggle": "./bin/smuggle"
+  },
   "keywords": [
     "webhook",
     "github",
