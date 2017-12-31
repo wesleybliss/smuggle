@@ -1,0 +1,33 @@
+{
+    "apps": [
+        {
+            "name"              : "dwm-api",
+            "cwd"               : "/app/server",
+            "script"            : "/app/server/src/index.js",
+            "node_args"         : "--harmony",
+            "env": {
+                "NODE_ENV": "development",
+                "AWESOME_SERVICE_API_TOKEN": "xxx"
+            },
+            "env_production": {
+                 "NODE_ENV": "production"
+            }
+        },{
+            "name"              : "dwm-client",
+            "cwd"               : "/app/client",
+            "script"            : "sabu",
+            "args"              : ["-c", "sabu.conf.json"],
+            "node_args"         : [],
+            "exec_interpreter"  : "none",
+            "exec_mode"         : "fork"
+        },
+        {
+            "name"              : "smuggle",
+            "cwd"               : "/smuggle/bin",
+            "script"            : "/smuggle/bin/smuggle",
+            "args"              : ["--config", "/app/smuggle.json"],
+            "node_args"         : [],
+            "exec_mode"         : "fork"
+        }
+    ]
+}

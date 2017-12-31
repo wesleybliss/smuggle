@@ -38,6 +38,9 @@ $ smuggle [--config smuggle.json]
                 "x-gitlab-event": "Pipeline Hook",
                 "x-gitlab-token": "abc123"
             },
+            "requiredProps": {
+                "object_attributes.status": "success"
+            },
             "reset": true,
             "action": "pull",
             "branch": "master",
@@ -45,7 +48,7 @@ $ smuggle [--config smuggle.json]
                 "echo 'Building application'",
                 "npm run build",
                 "echo 'Restarting PM2 instance'",
-                "sudo pm2 restart smuggle-test",
+                "pm2 restart smuggle-test",
                 "echo 'Cleaning up'",
                 "sh /path/to/cleanup.sh"
             ]
@@ -61,6 +64,7 @@ $ smuggle [--config smuggle.json]
 | repos.{name}.type               | `Enum("gitlab", "github")`    | Yes      | -          | Type of Git hosting service
 | repos.{name}.path               | `String`                      | Yes      | -          | Source location of the repo
 | repos.{name}.requiredHeaders    | `Object`                      | No       | `{}`       | Optional required headers to expect from webhook
+| repos.{name}.requiredProps      | `Object`                      | No       | `{}`       | Optional required body props to expect from webhook
 | repos.{name}.reset              | `Boolean`                     | No       | `False`    | If a `git reset --hard` should be performed before updating repo
 | repos.{name}.action             | `Enum("pull", "fetch/merge")` | No       | `"pull"`   | Type of operation to use when updating repo
 | repos.{name}.branch             | `String`                      | No       | `"master"` | Branch to perform `action` on
@@ -83,8 +87,31 @@ $ su - myuser -c 'smuggle --config "/path/to/smuggle.json"'
 ```
 
 
+## Testing via Docker
+
+The Docker/Compose files will start a PM2 session. The example includes
+a client, server, and Smuggle instance. You can have your existing Docker
+setup run Smuggle, or modify the example to pull a different repository.
+
+See `example/environment.json` for PM2 config.
+
+Running the example with `docker-compose build && docker-compose up` will:
+- Clone the sample repo
+- Run NPM install
+- Build client assets (Webpack in this case)
+- Copy the Smuggle config to the container
+- Start the API server, client, and Smuggle via PM2
+
+You can use something like [LocalTunnel](https://localtunnel.github.io/www/)
+to temporarily get a HTTPS link to your container, and use that to test your
+webhook via GitLab or GitHub.
+
+```shell
+$ lt -p 3100 # Smuggle port for this example
+```
+
+
 ## TODO
 
 - Add option to verify os.hostname() matches payload's reported host
 - Handle `sudo` more intelligently
-- Docker container for testing

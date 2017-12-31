@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  
+  app:
+    build: .
+    container_name: smuggle
+    image: mhart/alpine-node:latest
+    network_mode: "host"
+    privileged: true
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+      - "3100:3100"
+      - "8080:8080"
+    volumes:
+      - .:/smuggle:rw

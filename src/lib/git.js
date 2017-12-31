@@ -5,30 +5,48 @@ const log = require('../utils/logger')
 const chalk = require('chalk')
 const supportedActions = require('../supported-actions')
 const shell = require('shelljs')
+const dot = require('dot-object')
 const {
     cd,
     exec
 } = shell
 
-module.exports = (name, repo) => {
+/**
+ * Verifies expected body/payload keys & values,
+ * according to the Smuggle config provided
+ * 
+ * @param  {Object} repo Repository config (from smuggle.json)
+ * @param  {Object} body Request body (from Restify)
+ * @return {Boolean}     True if all key/value pairs match
+ */
+const verifyProps = (repo, body) => {
     
-    const {
-        path,
-        reset,
-        action,
-        branch
-    } = repo
+    for (let key in repo.requiredProps) {
+        
+        const givenValue = dot.pick(key, body)
+        const requiredValue = repo.requiredProps[key]
+        
+        if (givenValue !== requiredValue) {
+            console.warn(
+                `Expected ${chalk.bold(key)} to be ${chalk.bold(requiredValue)} ` +
+                `but got ${chalk.bold(givenValue)} instead`
+            )
+            return false
+        }
+        
+    }
     
-    if (!supportedActions.includes(action))
-        return log.warn('\t', 'Unsupported action', action,
-            '- must be one of', chalk.bold(supportedActions.join(', ')))
+    return true
     
-    if (!fs.existsSync(path))
-        return log.warn('\t', 'Repositiry path not accessible at', path)
-    
-    //
-    // @todo Move this generic git init to a shared file
-    //
+}
+
+/**
+ * Updates a Git repository according to the Smuggle config provided
+ * 
+ * @param  {Object} repo Repository config (from smuggle.json)
+ * @return {Void}        Logs it's own errors; doesn't return anything actionable
+ */
+const updateRepo = (repo, path, reset, action, branch) => {
     
     cd(path)
     
@@ -75,7 +93,11 @@ module.exports = (name, repo) => {
     if (repo.postActions)
         repo.postActions.forEach(cmd => {
             
-            log.info('\t', chalk.cyan('Post Action:'), cmd)
+            // Log any non 'echo' commands (but still process them,
+            // since they might include expansions like $PWD, etc.)
+            if (cmd && !cmd.trim().startsWith('echo'))
+                log.info('\t', chalk.cyan('Post Action:'), cmd)
+            
             res = exec(cmd, { silent: true })
             
             if (res.stderr)
@@ -88,4 +110,30 @@ module.exports = (name, repo) => {
             
         })
     
+} // updateRepo
+
+const processRepo = (name, repo, body) => {
+    
+    const {
+        path,
+        reset,
+        action,
+        branch
+    } = repo
+    
+    if (!supportedActions.includes(action))
+        return log.warn('\t', 'Unsupported action', action,
+            '- must be one of', chalk.bold(supportedActions.join(', ')))
+    
+    if (!fs.existsSync(path))
+        return log.warn('\t', 'Repositiry path not accessible at', path)
+    
+    // Verify required props match
+    if (!verifyProps(repo, body))
+        return log.warn('\t', 'Required props failed - aborting')
+    
+    updateRepo(repo, path, reset, action, branch)
+    
 }
+
+module.exports.processRepo = processRepo

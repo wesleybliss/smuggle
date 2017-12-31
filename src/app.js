@@ -32,7 +32,7 @@ app.use(cors.actual)
 //app.use(basicAuth(app.name, 'foo', 'NitradeDemo2017'))
 
 app.on('InternalError', (req, res, err) => {
-    log.error(err)
+    console.error(err)
     res.send(err.statusCode || 500, { error: err })
 })
 

@@ -5,6 +5,7 @@ const log = require('../utils/logger')
 const chalk = require('chalk')
 const { config } = app
 const supportedHosts = require('../supported-hosts')
+const { processRepo } = require('../lib/git')
 
 const verify = (req, res, next) => {
     
@@ -57,7 +58,7 @@ app.post('/:name', verify, (req, res) => {
         JSON.stringify(req.body, null, 4)*/
     )
     
-    require(`../lib/${repo.type}`)(name, repo)
+    processRepo(name, repo, req.body)
     
     res.send(200)
     
