@@ -1,6 +1,6 @@
 {
   "name": "smuggle",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Webhook interceptor",
   "main": "bin/smuggle",
   "scripts": {
