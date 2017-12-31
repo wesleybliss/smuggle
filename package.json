@@ -5,6 +5,7 @@
   "main": "bin/smuggle",
   "scripts": {
     "start": "nodemon --config ./nodemon.json bin/smuggle",
+    "patch-release": "npm version patch && npm publish && git push --follow-tags",
     "test": "mocha"
   },
   "repository": {
