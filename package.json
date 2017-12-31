@@ -8,15 +8,15 @@
     "patch-release": "npm version patch && npm publish && git push --follow-tags",
     "test": "mocha"
   },
-  "repository": {
-    "type": "git",
-    "url": "todo"
-  },
   "keywords": [
     "webhook",
     "github",
     "gitlab"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wesleybliss/smuggle.git"
+  },
   "author": "Wesley Bliss <wesley.bliss@gmail.com> (https://wesleybliss.com)",
   "license": "MIT",
   "dependencies": {
