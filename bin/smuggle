@@ -1,4 +1,4 @@
-#!/bin/env node
+#!/usr/bin/env node
 
 'use strict'
 // Bluebird tends to be a faster-than-native Promise implementation
