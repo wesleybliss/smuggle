@@ -48,6 +48,8 @@ const verifyProps = (repo, body) => {
  */
 const updateRepo = (repo, path, reset, action, branch) => {
     
+    log.info('Updating repo as user', process.env.USER)
+    
     cd(path)
     
     let res = exec('git status', { silent: true })

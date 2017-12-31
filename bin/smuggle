@@ -8,6 +8,7 @@ const fs = require('fs')
 const path = require('path')
 const program = require('commander')
 const initConfig = require('../src/utils/init-config')
+const shell = require('shelljs')
 
 process.title = 'smuggle'
 
@@ -18,8 +19,13 @@ args.shift() // Sabu executable
 
 // console.log(args, process.argv)
 
-if (args.length === 1 && args[0] === 'init')
-    return initConfig()
+if (args.length === 1) {
+    switch (args[0]) {
+        case 'init': return initConfig()
+        case 'pm2': return shell.exec('pm2 start `which smuggle` --name smuggle')
+        case 'pm2-sudo': return shell.exec('sudo pm2 start `which smuggle` --name smuggle')
+    }
+}
 
 program
     .version('1.0.0')
